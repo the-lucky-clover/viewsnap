@@ -1,0 +1,65 @@
+<style>
+  .container {
+    padding: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .setting {
+    margin-bottom: 12px;
+  }
+  label {
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  input[type="checkbox"] {
+    margin-right: 8px;
+  }
+  input[type="number"] {
+    width: 60px;
+    padding: 4px 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+</style>
+
+<div class="container">
+  <div class="setting">
+    <label>
+      <input type="checkbox" id="enabled" preference="enabled" checked>
+      Enable Smart Anchor
+    </label>
+  </div>
+  
+  <div class="setting">
+    <label for="aspectThreshold">Aspect Ratio Threshold:</label>
+    <input type="number" id="aspectThreshold" preference="aspectThreshold" value="1.3" step="0.1" min="0.5" max="3">
+    <span>(Videos below this ratio anchor vertically)</span>
+  </div>
+  
+  <div class="setting">
+    <label for="edgeMargin">Edge Margin (px):</label>
+    <input type="number" id="edgeMargin" preference="edgeMargin" value="20" min="0" max="100">
+  </div>
+  
+  <div class="setting">
+    <label for="animationDuration">Animation Duration (ms):</label>
+    <input type="number" id="animationDuration" preference="animationDuration" value="300" min="0" max="1000">
+  </div>
+  
+  <div class="setting">
+    <label>
+      <input type="checkbox" id="showGuidelines" preference="showGuidelines" checked>
+      Show Visual Guidelines
+    </label>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('input[preference]').forEach(input => {
+    input.addEventListener('change', () => {
+      preferences[input.getAttribute('preference')] = input.type === 'checkbox' 
+        ? input.checked 
+        : parseFloat(input.value);
+    });
+  });
+</script>
