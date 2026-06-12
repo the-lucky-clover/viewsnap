@@ -5,6 +5,8 @@
   "author": { "name": "pounds_1" },
   "description": "dynamically anchors videos to display edges based on aspect ratio with optional overrides",
   "entry": "main.js",
+  "ghRepo": "the-lucky-clover/viewsnap",
+  "ghVersion": 1,
   "preferenceDefaults": {
     "enabled": true,
     "aspect-threshold": 1.3,
