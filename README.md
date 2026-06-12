@@ -1,45 +1,45 @@
-# ViewSnap - IINA Smart Anchor Video Plugin
+# viewsnap - iina smart anchor video plugin
 
-Dynamically anchors video windows to display edges based on aspect ratio, with optional manual overrides.
+dynamically anchors video windows to display edges based on aspect ratio, with optional manual overrides.
 
-## Installation
+## installation
 
-In IINA:
-1. **Settings** → **Plugins** → **Install from GitHub**
-2. Enter: `the-lucky-clover/ViewSnap`
-3. Enable the plugin in Plugins preferences
+in iina:
+1. **settings** → **plugins** → **install from github**
+2. enter: `the-lucky-clover/viewsnap`
+3. enable the plugin in plugins preferences
 
-Alternatively:
-1. Download the latest release from GitHub
-2. Double-click the `ViewSnap.iinaplgz` file
-3. IINA will install the plugin automatically
+alternatively:
+1. download the latest release from github
+2. double-click the `viewsnap.iinaplgz` file
+3. iina will install the plugin automatically
 
-## Usage
+## usage
 
-1. Open any video in IINA
-2. Plugin automatically detects aspect ratio and anchors to nearest edge
-3. Drag window to move freely (manual override)
-4. Press `Ctrl+Shift+A` to toggle anchoring on/off
+1. open any video in iina
+2. plugin automatically detects aspect ratio and anchors to nearest edge
+3. drag window to move freely (manual override)
+4. press `ctrl+shift+a` to toggle anchoring on/off
 
-## Configuration
+## configuration
 
-| Setting | Default | Description |
+| setting | default | description |
 |---------|---------|-------------|
-| `enabled` | true | Master enable/disable |
-| `aspectThreshold` | 1.3 | Videos below this ratio anchor vertically |
-| `edgeMargin` | 20 | Distance from screen edge in pixels |
-| `animationDuration` | 300 | Animation time in milliseconds |
-| `showGuidelines` | true | Show visual feedback when anchored |
+| `enabled` | true | master enable/disable |
+| `aspect-threshold` | 1.3 | videos below this ratio anchor vertically |
+| `edge-margin` | 20 | distance from screen edge in pixels |
+| `animation-duration` | 300 | animation time in milliseconds |
+| `show-guidelines` | true | show visual feedback when anchored |
 
-## Features
+## features
 
-- **Aspect-Ratio-Based Anchoring**: Vertical videos (9:16) anchor to left/right edges; horizontal videos (16:9) anchor to top/bottom
-- **Smooth Animations**: Configurable animation when anchoring
-- **Manual Override**: Drag to temporarily disable auto-anchoring
-- **Keyboard Toggle**: `Ctrl+Shift+A` to enable/disable anchoring
-- **Multi-Monitor Support**: Detects active screen and resolves edge conflicts
-- **Visual Guidelines**: Subtle blue outline shows when anchored
+- **aspect-ratio-based anchoring**: vertical videos (9:16) anchor to left/right edges; horizontal videos (16:9) anchor to top/bottom
+- **smooth animations**: configurable animation when anchoring
+- **manual override**: drag to temporarily disable auto-anchoring
+- **keyboard toggle**: `ctrl+shift+a` to enable/disable anchoring
+- **multi-monitor support**: detects active screen and resolves edge conflicts
+- **visual guidelines**: subtle blue outline shows when anchored
 
 ---
 
-Made with <3 by <a href="https://soundcloud.com/lucky-clover/" target="_blank">Lucky Clover</a>
+made with <3 by <a href="https://soundcloud.com/lucky-clover/" target="_blank">lucky clover</a>

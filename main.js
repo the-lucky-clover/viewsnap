@@ -1,12 +1,12 @@
-// ViewSnap - IINA Smart Anchor Video Plugin
-// Dynamically anchors videos to display edges based on aspect ratio
+// viewsnap - iina smart anchor video plugin
+// dynamically anchors videos to display edges based on aspect ratio
 
 const anchoredWindows = new Map();
-const ASPECT_THRESHOLD = preferences.aspectThreshold || 1.3;
-const EDGE_MARGIN = preferences.edgeMargin || 20;
-const ANIMATION_DURATION = preferences.animationDuration || 300;
+const ASPECT_THRESHOLD = preferences['aspect-threshold'] || 1.3;
+const EDGE_MARGIN = preferences['edge-margin'] || 20;
+const ANIMATION_DURATION = preferences['animation-duration'] || 300;
 
-// Screen edge enum
+// screen edge enum
 const ScreenEdge = {
   NONE: 'none',
   LEFT: 'left',
@@ -15,19 +15,19 @@ const ScreenEdge = {
   BOTTOM: 'bottom'
 };
 
-// Get window aspect ratio
+// get window aspect ratio
 function getAspectRatio(window) {
   const frame = window.frame();
   return { width: frame.width / frame.height, height: frame.height / frame.width };
 }
 
-// Check if video is vertical
+// check if video is vertical
 function isVerticalVideo(window) {
   const aspect = getAspectRatio(window);
   return aspect.width < ASPECT_THRESHOLD;
 }
 
-// Find closest screen edge
+// find closest screen edge
 function findClosestEdge(window) {
   const screen = window.screen() || iina.window().screen();
   const windowFrame = window.frame();
@@ -45,7 +45,7 @@ function findClosestEdge(window) {
   )[0];
 }
 
-// Find vertical anchor edge (left or right)
+// find vertical anchor edge (left or right)
 function findVerticalAnchorEdge(window) {
   const edge = findClosestEdge(window);
   if (edge === ScreenEdge.LEFT || edge === ScreenEdge.RIGHT) {
@@ -55,7 +55,7 @@ function findVerticalAnchorEdge(window) {
     ? ScreenEdge.LEFT : ScreenEdge.RIGHT;
 }
 
-// Find horizontal anchor edge (top or bottom)
+// find horizontal anchor edge (top or bottom)
 function findHorizontalAnchorEdge(window) {
   const edge = findClosestEdge(window);
   if (edge === ScreenEdge.TOP || edge === ScreenEdge.BOTTOM) {
@@ -65,7 +65,7 @@ function findHorizontalAnchorEdge(window) {
     ? ScreenEdge.BOTTOM : ScreenEdge.TOP;
 }
 
-// Animate window to edge
+// animate window to edge
 function animateToEdge(window, edge) {
   const currentFrame = window.frame();
   const screen = window.screen() || iina.window().screen();
@@ -90,11 +90,11 @@ function animateToEdge(window, edge) {
   window.setBounds(newOrigin.x, newOrigin.y, currentFrame.width, currentFrame.height, true);
 }
 
-// Anchor window to appropriate edge
+// anchor window to appropriate edge
 function anchorWindow(window) {
   const state = anchoredWindows.get(window.id);
   
-  if (state?.isAnchored) return;
+  if (state?.is_anchored) return;
   
   const edge = isVerticalVideo(window) 
     ? findVerticalAnchorEdge(window) 
@@ -103,17 +103,17 @@ function anchorWindow(window) {
   animateToEdge(window, edge);
   
   anchoredWindows.set(window.id, {
-    isAnchored: true,
-    anchorEdge: edge,
-    originalPosition: { ...window.frame() }
+    is_anchored: true,
+    anchor_edge: edge,
+    original_position: { ...window.frame() }
   });
   
-  if (preferences.showGuidelines) {
+  if (preferences['show-guidelines']) {
     showGuideline(window);
   }
 }
 
-// Show visual guideline
+// show visual guideline
 function showGuideline(window) {
   const overlay = document.createElement('div');
   Object.assign(overlay.style, {
@@ -137,13 +137,13 @@ function showGuideline(window) {
   }, 2000);
 }
 
-// Toggle anchoring on/off
+// toggle anchoring on/off
 function toggleAnchoring() {
   iina.windows().forEach(window => {
-    const state = anchoredWindows.get(window.id) || { isAnchored: false };
-    state.isAnchored = !state.isAnchored;
+    const state = anchoredWindows.get(window.id) || { is_anchored: false };
+    state.is_anchored = !state.is_anchored;
     
-    if (!state.isAnchored) {
+    if (!state.is_anchored) {
       anchoredWindows.delete(window.id);
     } else {
       anchorWindow(window);
@@ -153,66 +153,35 @@ function toggleAnchoring() {
   });
 }
 
-// Check all windows periodically
+// check all windows periodically
 function checkWindows() {
   if (!preferences.enabled) return;
   
   iina.windows().forEach(window => {
     const state = anchoredWindows.get(window.id);
-    if (!state?.isAnchored && isVideoWindow(window)) {
+    if (!state?.is_anchored && isVideoWindow(window)) {
       anchorWindow(window);
     }
   });
 }
 
-// Check if window is a video window
+// check if window is a video window
 function isVideoWindow(window) {
   return window.isVideoWindow && window.isVideoWindow();
 }
 
-// Setup drag monitoring
+// setup drag monitoring
 function setupDragMonitoring(window) {
-  const observer = new MutationObserver(() => {
-    const state = anchoredWindows.get(window.id);
-    if (!state?.isAnchored) return;
-    
-    const currentX = window.frame().x;
-    const currentY = window.frame().y;
-    const screen = window.screen()?.frame() || iina.window().screen().frame();
-    
-    let isFarFromEdge = false;
-    switch (state.anchorEdge) {
-      case ScreenEdge.LEFT:
-        isFarFromEdge = currentX > screen.x + 30;
-        break;
-      case ScreenEdge.RIGHT:
-        isFarFromEdge = currentX < screen.x + screen.width - 30;
-        break;
-      case ScreenEdge.TOP:
-        isFarFromEdge = currentY < screen.y + 30;
-        break;
-      case ScreenEdge.BOTTOM:
-        isFarFromEdge = currentY > screen.y + screen.height - 30;
-        break;
-    }
-    
-    if (isFarFromEdge) {
-      state.isAnchored = false;
-      anchoredWindows.set(window.id, state);
-    }
-  });
-  
-  // Monitor window position changes
   window.onBoundsChanged(() => {
     const state = anchoredWindows.get(window.id);
-    if (!state?.isAnchored) return;
+    if (!state?.is_anchored) return;
     
     const currentX = window.frame().x;
     const currentY = window.frame().y;
     const screen = window.screen()?.frame() || iina.window().screen().frame();
     
     let isFarFromEdge = false;
-    switch (state.anchorEdge) {
+    switch (state.anchor_edge) {
       case ScreenEdge.LEFT:
         isFarFromEdge = currentX > screen.x + 30;
         break;
@@ -228,39 +197,39 @@ function setupDragMonitoring(window) {
     }
     
     if (isFarFromEdge) {
-      state.isAnchored = false;
+      state.is_anchored = false;
       anchoredWindows.set(window.id, state);
     }
   });
 }
 
-// Initialize plugin
+// initialize plugin
 iina.onReady(() => {
-  console.log('ViewSnap plugin loaded');
+  console.log('viewsnap plugin loaded');
   
-  // Register hotkey
+  // register hotkey
   iina.registerShortcut('ctrl+shift+a', toggleAnchoring);
   
-  // Start monitoring
+  // start monitoring
   setInterval(checkWindows, 1000);
   
-  // Setup for existing windows
+  // setup for existing windows
   iina.windows().forEach(window => {
     setupDragMonitoring(window);
   });
   
-  // Setup for new windows
+  // setup for new windows
   iina.on('windowDidLoad', (window) => {
     setupDragMonitoring(window);
   });
 });
 
-// Handle aspect ratio changes
+// handle aspect ratio changes
 iina.on('videoSizeChanged', (window) => {
   const state = anchoredWindows.get(window.id);
-  if (state?.isAnchored) {
-    // Re-anchor on aspect ratio change
-    state.isAnchored = false;
+  if (state?.is_anchored) {
+    // re-anchor on aspect ratio change
+    state.is_anchored = false;
     anchoredWindows.set(window.id, state);
     anchorWindow(window);
   }
