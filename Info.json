@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "identifier": "com.viewsnap.plugin",
   "author": { "name": "pounds_1" },
-  "description": "Dynamically anchors videos to display edges based on aspect ratio with optional overrides",
+  "description": "dynamically anchors videos to display edges based on aspect ratio with optional overrides",
   "entry": "main.js",
-  "preference-defaults": {
+  "preferenceDefaults": {
     "enabled": true,
     "aspect-threshold": 1.3,
     "edge-margin": 20,
