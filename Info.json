@@ -1,0 +1,10 @@
+{
+  "name": "ViewSnap",
+  "description": "Dynamically anchors videos to display edges based on aspect ratio",
+  "version": "1.0.0",
+  "author": "Custom Plugin",
+  "identifier": "com.viewsnap.plugin",
+  "language": "Swift",
+  "main": "ViewSnap",
+  "preferences": "SmartAnchorSettingsViewController"
+}
